@@ -1,8 +1,9 @@
 <%- include('./partials/header');%>
 <form method="post" action="/product/add" enctype="multipart/form-data">
   <div class="form-group">
-    <label for="name">Tên sản phẩm</label>
+    <label for="user">Tên sản phẩm</label>
     <input
+      value="<%= name %>"
       name="name"
       type="text"
       class="form-control"
@@ -12,7 +13,7 @@
   </div>
   <div class="form-group">
     <label for="desc">Miêu tả sản phẩm</label>
-    <textarea class="form-control" name="desc" id="desc" rows="3"></textarea>
+    <textarea class="form-control" name="desc" id="desc" rows="3"><%= desc %></textarea>
   </div>
   <div class="form-group">
     <label for="desc">Thành phần</label>
@@ -21,11 +22,12 @@
       name="ingredient"
       id="ingredient"
       rows="3"
-    ></textarea>
+    ><%= ingredient %></textarea>
   </div>
   <div class="form-group">
     <label for="brand">Thương hiệu</label>
     <input
+    value="<%= brand %>"
       name="brand"
       type="text"
       class="form-control"
@@ -36,6 +38,7 @@
   <div class="form-group">
     <label for="brand">Danh mục</label>
     <input
+    value="<%= category %>"
       name="category"
       type="text"
       class="form-control"
@@ -51,21 +54,23 @@
         <div class="row">
           <div class="col-sm-5">
             <input
+              value="<%= volume %>"
               name="volume"
-              type="text"
+              type="number"
               class="form-control"
               id="volume"
               placeholder="Dung tích"
             />
           </div>
-          <select name="unit_volume" class="col form-control">
+          <select name="volume_unit" class="col form-control">
             <option selected value="ml">ml</option>
             <option value="g">g</option>
           </select>
           <div class="col-sm-5">
             <input
+              value="<%= price %>"
               name="price"
-              type="text"
+              type="number"
               class="form-control"
               id="price"
               placeholder="Giá bán"
@@ -92,6 +97,13 @@
     <label for="img">Example file input</label>
     <input name="img" type="file" class="form-control-file" id="img" />
   </div>
+  <div class="form-group">
+    <%if(error.length > 0){%>
+      <div class="alert alert-danger alert-dismissible fade show">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        <%= error %>
+      </div>
+    <%}%>
   <button type="submit" class="btn btn-primary">Submit</button>
 </form>
 <%- include('./partials/footer');%>

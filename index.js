@@ -2,6 +2,9 @@ const express = require("express");
 const ejs = require("ejs");
 const bodyParser = require("body-parser");
 const path = require("path");
+const cookieParser = require("cookie-parser");
+const session = require("express-session");
+const flash = require("express-flash");
 const multer = require("multer");
 
 const app = express();
@@ -23,6 +26,9 @@ app.set("views", viewsPath);
 app.set("view engine", "ejs");
 //set routes
 const productRouter = require("./src/routes/product");
+app.use(cookieParser("hungvuong"));
+app.use(session({ cookie: { maxAge: 60000 } }));
+app.use(flash());
 app.use("/product", productRouter);
 
 app.get("/", (req, res) => {

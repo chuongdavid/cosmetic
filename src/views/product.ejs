@@ -1,4 +1,83 @@
 <%- include('./partials/header');%>
-<h1>Product page</h1>
-<a href="/product/add">Thêm sản phẩm</a>
+
+<h1>Trang sản phẩm</h1>
+<a class="btn btn-success m-2 btn-sm" href="/product/add">Thêm sản phẩm</a>
+<%if(success.length > 0){%>
+<div class="alert alert-success alert-dismissible fade show">
+  <button type="button" class="close" data-dismiss="alert">&times;</button>
+  <%= success %>
+</div>
+
+<%}%> <%if(error.length > 0){%>
+<div class="alert alert-danger alert-dismissible fade show">
+  <button type="button" class="close" data-dismiss="alert">&times;</button>
+  <%= error %>
+</div>
+
+<%}%>
+
+<!-- Page Heading -->
+
+<!-- DataTales Example -->
+<div class="card shadow mb-4">
+  <div class="card-body">
+    <div class="table-responsive">
+      <table
+        class="table table-bordered"
+        id="dataTable"
+        width="100%"
+        cellspacing="0"
+      >
+        <thead>
+          <tr>
+            <th>Mã sản phẩm</th>
+            <th>Tên sản phẩm</th>
+            <th>Hình ảnh</th>
+            <th>Mô tả</th>
+            <th>Thành phần</th>
+            <th>Thương hiệu</th>
+            <th>Danh mục</th>
+            <th>Dung tích</th>
+            <th>Giá bán</th>
+            <th>Hành động</th>
+          </tr>
+        </thead>
+        <tbody>
+          <%if(productList){%> <%productList.forEach((product) => {%>
+          <tr>
+            <td><%=product.id%></td>
+            <td><%=product.name%></td>
+            <td>
+              <img
+                src="/img/<%=product.image%>"
+                width="100px"
+                height="100px"
+                alt=""
+              />
+            </td>
+            <td><%=product.desc%></td>
+            <td><%=product.ingredient%></td>
+            <td><%=product.brand%></td>
+            <td><%=product.category%></td>
+            <td><%=product.volume%> <%=product.volume_unit%></td>
+            <td><%=product.price%></td>
+            <td>
+              <a
+                class="delete-product btn btn-danger m-1"
+                href="#"
+                data-id="<%= product.id %>"
+                >Xóa</a
+              >
+              <a class="btn btn-warning m-1" href="product/edit/<%=product.id%>"
+                >Sửa</a
+              >
+            </td>
+          </tr>
+          <%});%> <%}%>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
 <%- include('./partials/footer');%>
