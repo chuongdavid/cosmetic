@@ -4,6 +4,7 @@ const { nanoid } = require("nanoid");
 const multer = require("multer");
 const { check, validationResult } = require("express-validator");
 const fs = require("fs");
+const e = require("express");
 const productRouter = express.Router();
 
 //middleware upload
@@ -25,8 +26,15 @@ const upload = multer({
 productRouter.get("/", (req, res) => {
   const success = req.flash("success") || "";
   const error = req.flash("error") || "";
+  //delete product in product table if not exist in product_detailed
+  let sql_delete = `DELETE FROM product WHERE NOT EXISTS ( SELECT 1 FROM product_detailed WHERE product_detailed.product_id = product.id )`;
+  db.query(sql_delete, (err, result, fields) => {
+    if (err) {
+      console.error(err);
+    }
+  });
   //xoa neu chi tiet san pham khong ton tai
-  const user = req.session.user
+  const user = req.session.user;
   let productList = new Array();
   const sql =
     "SELECT  product_detailed.id,product.name,product.desc,product.ingredient,product.brand,product.category,product.image,product_attr.volume,product_attr.price,product_attr.volume_unit FROM product,product_detailed,product_attr WHERE product.id = product_detailed.product_id AND product_detailed.attr_id = product_attr.id";
@@ -37,7 +45,7 @@ productRouter.get("/", (req, res) => {
       result.forEach((row) => {
         productList.push(row);
       });
-      res.render("product", { success, productList, error , user });
+      res.render("product", { success, productList, error, user });
     } else {
       res.render("product");
     }
@@ -81,7 +89,7 @@ const add_validator = [
     .withMessage("Không được để trống giá sản phẩm "),
 ];
 productRouter.get("/add", (req, res) => {
-  const user = req.session.user
+  const user = req.session.user;
   const error = req.flash("error") || "";
   const name = req.flash("name") || "";
   const desc = req.flash("desc") || "";
@@ -100,7 +108,7 @@ productRouter.get("/add", (req, res) => {
     category,
     volume,
     price,
-    user
+    user,
   });
 });
 
@@ -118,8 +126,6 @@ productRouter.post("/add", upload.single("img"), add_validator, (req, res) => {
       price,
       volume_unit,
     } = req.body;
-    console.log(req.body);
-    console.log(volume_unit);
     let img = req.file;
     if (!img) {
       req.flash("name", name);
@@ -253,6 +259,7 @@ productRouter.delete("/delete/:id", (req, res) => {
       res.send("Xu ly");
     } else if (result.affectedRows > 0) {
       req.flash("success", "Xóa sản phẩm thành công");
+
       console.log(result);
       return res.send("success");
     } else {
@@ -261,4 +268,54 @@ productRouter.delete("/delete/:id", (req, res) => {
     }
   });
 });
+productRouter.get("/edit/:id", (req, res) => {
+  const id = req.params.id;
+  const user = req.session.user;
+  let sql = `SELECT p.*, d.id ,a.volume, a.price, a.volume_unit FROM product_detailed AS d, product AS p, product_attr AS a WHERE d.id = ? AND a.id = d.attr_id`;
+  const params = [id];
+  db.query(sql, params, (err, result, fields) => {
+    if (err) {
+      req.flash("error", err);
+      console.log("Lỗi: ", err);
+    }
+    //nếu không lỗi
+    const edit_product = result[0];
+    res.render("editProduct", { edit_product, user });
+  });
+});
+productRouter.post("/edit", (req, res) => {
+  const {
+    id,
+    name,
+    desc,
+    ingredient,
+    brand,
+    category,
+    volume,
+    price,
+    volume_unit,
+  } = req.body;
+  console.log(req.body);
+  const sql =
+    "UPDATE product AS p,product_detailed AS d ,product_attr AS a SET p.name = ?,p.desc = ?,p.ingredient = ? ,p.brand = ?,p.category = ?,a.volume = ?,a.price = ?,a.volume_unit = ? WHERE d.id = ? AND d.product_id = p.id AND a.id = d.attr_id";
+  const params = [
+    name,
+    desc,
+    ingredient,
+    brand,
+    category,
+    volume,
+    price,
+    volume_unit,
+    id,
+  ];
+  db.query(sql, params, (err, result, fields) => {
+    if (err) {
+      console.log(err);
+    }
+    console.log(result);
+    return res.redirect("/product");
+  });
+});
+
 module.exports = productRouter;

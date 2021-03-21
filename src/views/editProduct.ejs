@@ -1,0 +1,101 @@
+<%- include('./partials/header');%>
+<form method="POST" action="/product/edit">
+  <div class="form-group">
+    <label for="user">ID sản phẩm</label>
+    <input
+      readonly
+      value="<%= edit_product.id %>"
+      name="id"
+      type="text"
+      class="form-control"
+      id="product_detailed_id"
+    />
+  </div>
+  <div class="form-group">
+    <label for="user">Tên sản phẩm</label>
+    <input
+      value="<%= edit_product.name %>"
+      name="name"
+      type="text"
+      class="form-control"
+      id="name"
+      placeholder="Nhập tên sản phẩm"
+    />
+  </div>
+  <div class="form-group">
+    <label for="desc">Miêu tả sản phẩm</label>
+    <textarea class="form-control" name="desc" id="desc" rows="3"><%= edit_product.desc %></textarea>
+  </div>
+  <div class="form-group">
+    <label for="desc">Thành phần</label>
+    <textarea
+      class="form-control"
+      name="ingredient"
+      id="ingredient"
+      rows="3"
+    ><%= edit_product.ingredient %></textarea>
+  </div>
+  <div class="form-group">
+    <label for="brand">Thương hiệu</label>
+    <input
+    value="<%= edit_product.brand %>"
+      name="brand"
+      type="text"
+      class="form-control"
+      id="brand"
+      placeholder="Nhập tên thương hiệu"
+    />
+  </div>
+  <div class="form-group">
+    <label for="brand">Danh mục</label>
+    <input
+    value="<%= edit_product.category %>"
+      name="category"
+      type="text"
+      class="form-control"
+      id="brand"
+      placeholder="Danh mục"
+    />
+  </div>
+
+  <div class="form-group">
+    <div id="first-volume">
+      <!-- row of each -->
+      <div class="clone-volume">
+        <div class="row">
+          <div class="col-sm-5">
+            <input
+              value="<%= edit_product.volume %>"
+              name="volume"
+              type="number"
+              class="form-control"
+              id="volume"
+              placeholder="Dung tích"
+            />
+          </div>
+          <select name="volume_unit" class="col form-control">
+            <option selected value="ml">ml</option>
+            <option value="g">g</option>
+          </select>
+          <div class="col-sm-5">
+            <input
+              value="<%= edit_product.price %>"
+              name="price"
+              type="number"
+              class="form-control"
+              id="price"
+              placeholder="Giá bán"
+            />
+          </div>
+        </div>
+
+        <hr />
+      </div>
+      <!-- row of each -->
+    </div>
+  </div>
+
+  <div class="form-group">
+  <button id="edit_product" type="submit" class=" btn btn-primary">Update</button>
+</form>
+<%- include('./partials/footer');%>
