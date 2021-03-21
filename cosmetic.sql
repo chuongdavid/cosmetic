@@ -114,10 +114,9 @@ CREATE TABLE `product_pakage` (
 
 CREATE TABLE `user` (
   `id` int(11) NOT NULL,
-  `email` varchar(100) DEFAULT NULL,
-  `role` int(11) DEFAULT 0,
   `name` varchar(100) DEFAULT NULL,
-  `phone_number` varchar(15) DEFAULT NULL,
+  `email` varchar(100) DEFAULT NULL,
+  `phone` varchar(15) DEFAULT NULL,
   `password` varchar(100) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 

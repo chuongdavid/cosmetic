@@ -26,7 +26,7 @@ productRouter.get("/", (req, res) => {
   const success = req.flash("success") || "";
   const error = req.flash("error") || "";
   //xoa neu chi tiet san pham khong ton tai
-
+  const user = req.session.user
   let productList = new Array();
   const sql =
     "SELECT  product_detailed.id,product.name,product.desc,product.ingredient,product.brand,product.category,product.image,product_attr.volume,product_attr.price,product_attr.volume_unit FROM product,product_detailed,product_attr WHERE product.id = product_detailed.product_id AND product_detailed.attr_id = product_attr.id";
@@ -37,7 +37,7 @@ productRouter.get("/", (req, res) => {
       result.forEach((row) => {
         productList.push(row);
       });
-      res.render("product", { success, productList, error });
+      res.render("product", { success, productList, error , user });
     } else {
       res.render("product");
     }
@@ -81,6 +81,7 @@ const add_validator = [
     .withMessage("Không được để trống giá sản phẩm "),
 ];
 productRouter.get("/add", (req, res) => {
+  const user = req.session.user
   const error = req.flash("error") || "";
   const name = req.flash("name") || "";
   const desc = req.flash("desc") || "";
@@ -99,6 +100,7 @@ productRouter.get("/add", (req, res) => {
     category,
     volume,
     price,
+    user
   });
 });
 
