@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.0.4
+-- version 5.0.3
 -- https://www.phpmyadmin.net/
 --
 -- Máy chủ: 127.0.0.1
--- Thời gian đã tạo: Th3 20, 2021 lúc 02:31 PM
--- Phiên bản máy phục vụ: 10.4.17-MariaDB
--- Phiên bản PHP: 7.3.27
+-- Thời gian đã tạo: Th3 21, 2021 lúc 05:16 AM
+-- Phiên bản máy phục vụ: 10.4.14-MariaDB
+-- Phiên bản PHP: 7.3.23
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -20,6 +20,33 @@ SET time_zone = "+00:00";
 --
 -- Cơ sở dữ liệu: `cosmetic`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Cấu trúc bảng cho bảng `account`
+--
+
+CREATE TABLE `account` (
+  `id` int(20) NOT NULL,
+  `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `email` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `role` int(11) NOT NULL DEFAULT 0,
+  `phone` varchar(10) COLLATE utf8_unicode_ci NOT NULL,
+  `password` varchar(255) COLLATE utf8_unicode_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- Đang đổ dữ liệu cho bảng `account`
+--
+
+INSERT INTO `account` (`id`, `name`, `email`, `role`, `phone`, `password`) VALUES
+(6, 'Trung Tín', 'tincao241@gmail.com', 0, '0909829308', '$2b$10$4OIo28k.CJoGA0TnQ8todOTDfAmru9RlZO.aRB7tBQsWsMof3wHne'),
+(8, 'IPhone 12', 'tincao241@gmail.com', 0, '0909829308', '$2b$10$.02l/wCjyAHmhectQZAR5us1wAGfkK0rednXy76n1s0PdrmKlyImy'),
+(9, 'Trung Tín', 'tincao241@gmail.com', 0, '0909829308', '$2b$10$5F252HgSdfyTTo8Rv7qq2e4y7v7GTklrgFDAvM9Cgmfs/vBWNj8MO'),
+(10, 'Trung Tín', 'tincao241@gmail.com', 0, '0909829308', '$2b$10$oaSNs0TH2S47Z7NV2oFR4u.2Tk8ImkGRhe4MxwsPsaV1kixW/vHWy'),
+(11, 'Trung Tín', 'tincao241@gmail.com', 0, '0909829308', '$2b$10$QkFxpdBPsqddZY.fjZotKOxbsD3HzYISYmxhHuezfBWKggrtDikHu'),
+(12, 'Dương Thụy Chương', 'tincao111@gmail.com', 0, '0909829308', '$2b$10$GcyF23o5A9N8YLrc83gGoetjceA1/p4KayvVGfjvq5SukG6UhxUkG');
 
 -- --------------------------------------------------------
 
@@ -106,23 +133,15 @@ CREATE TABLE `product_pakage` (
   `price_import` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- --------------------------------------------------------
-
---
--- Cấu trúc bảng cho bảng `user`
---
-
-CREATE TABLE `user` (
-  `id` int(11) NOT NULL,
-  `name` varchar(100) DEFAULT NULL,
-  `email` varchar(100) DEFAULT NULL,
-  `phone` varchar(15) DEFAULT NULL,
-  `password` varchar(100) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
 --
 -- Chỉ mục cho các bảng đã đổ
 --
+
+--
+-- Chỉ mục cho bảng `account`
+--
+ALTER TABLE `account`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Chỉ mục cho bảng `product`
@@ -152,25 +171,19 @@ ALTER TABLE `product_pakage`
   ADD KEY `product_id` (`product_id`);
 
 --
--- Chỉ mục cho bảng `user`
---
-ALTER TABLE `user`
-  ADD PRIMARY KEY (`id`);
-
---
 -- AUTO_INCREMENT cho các bảng đã đổ
 --
+
+--
+-- AUTO_INCREMENT cho bảng `account`
+--
+ALTER TABLE `account`
+  MODIFY `id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT cho bảng `product_pakage`
 --
 ALTER TABLE `product_pakage`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT cho bảng `user`
---
-ALTER TABLE `user`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --

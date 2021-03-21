@@ -14,7 +14,7 @@ const UserRouter = require('./src/routes/UserRouter')
 const app = express();
 
 app.use(cookieParser('123'));
-app.use(session({ cookie:{maxAge: 6000}}));
+app.use(session({ cookie:{maxAge: 3600000}}));
 app.use(flash());
 app.use('/user', UserRouter)
  
