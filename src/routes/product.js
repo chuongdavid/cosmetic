@@ -34,7 +34,7 @@ productRouter.get("/", (req, res) => {
     }
   });
   //xoa neu chi tiet san pham khong ton tai
-  const user = req.session.user
+  const user = req.session.user;
   let productList = new Array();
   const sql =
     "SELECT  product_detailed.id,product.name,product.desc,product.ingredient,product.brand,product.category,product.image,product_attr.volume,product_attr.price,product_attr.volume_unit FROM product,product_detailed,product_attr WHERE product.id = product_detailed.product_id AND product_detailed.attr_id = product_attr.id";
@@ -45,7 +45,7 @@ productRouter.get("/", (req, res) => {
       result.forEach((row) => {
         productList.push(row);
       });
-      res.render("product", { success, productList, error , user });
+      res.render("product", { success, productList, error, user });
     } else {
       res.render("product");
     }
@@ -89,7 +89,7 @@ const add_validator = [
     .withMessage("Không được để trống giá sản phẩm "),
 ];
 productRouter.get("/add", (req, res) => {
-  const user = req.session.user
+  const user = req.session.user;
   const error = req.flash("error") || "";
   const name = req.flash("name") || "";
   const desc = req.flash("desc") || "";
@@ -108,7 +108,7 @@ productRouter.get("/add", (req, res) => {
     category,
     volume,
     price,
-    user
+    user,
   });
 });
 
@@ -270,6 +270,7 @@ productRouter.delete("/delete/:id", (req, res) => {
 });
 productRouter.get("/edit/:id", (req, res) => {
   const id = req.params.id;
+  const user = req.session.user;
   let sql = `SELECT p.*, d.id ,a.volume, a.price, a.volume_unit FROM product_detailed AS d, product AS p, product_attr AS a WHERE d.id = ? AND a.id = d.attr_id`;
   const params = [id];
   db.query(sql, params, (err, result, fields) => {
@@ -279,8 +280,7 @@ productRouter.get("/edit/:id", (req, res) => {
     }
     //nếu không lỗi
     const edit_product = result[0];
-    console.log(edit_product);
-    res.render("editProduct", { edit_product });
+    res.render("editProduct", { edit_product, user });
   });
 });
 productRouter.post("/edit", (req, res) => {
