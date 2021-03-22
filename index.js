@@ -8,16 +8,16 @@ const flash = require("express-flash");
 const multer = require("multer");
 const session = require("express-session");
 const UserRouter = require("./src/routes/UserRouter");
-const pakageRouter = require("./src/routes/pakage");
-const productRouter = require("./src/routes/product");
+
+
 const app = express();
 
 app.use(cookieParser("123"));
 app.use(session({ cookie: { maxAge: 3600000 } }));
 app.use(flash());
 app.use("/user", UserRouter);
-app.use("/product", productRouter);
-app.use("/pakage", pakageRouter);
+
+
 //
 
 // parse requests of content-type - application/json
@@ -34,14 +34,14 @@ const viewsPath = path.join(__dirname, "./src/views");
 app.set("views", viewsPath);
 app.set("view engine", "ejs");
 //set routes
-
-
+const productRouter = require("./src/routes/product");
+const pakageRouter = require("./src/routes/package");
 app.use(cookieParser("hungvuong"));
 app.use(session({ cookie: { maxAge: 3600000 } }));
 app.use(flash());
 
-
-
+app.use("/product", productRouter);
+app.use("/package", pakageRouter);
 app.get("/", (req, res) => {
   if (!req.session.user) {
     return res.redirect("/user/login");

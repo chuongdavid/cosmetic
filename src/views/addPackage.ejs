@@ -1,0 +1,46 @@
+<%- include('./partials/header');%>
+<form method="post" action="/package/add">
+  <div class="form-group">
+    <label for="package">Mã sản phẩm</label>
+    <input
+
+      name="product_id"
+      type="text"
+      class="form-control"
+      id="product_id"
+      placeholder="Nhập chi tiết mã sản phẩm"
+    />
+  </div>
+  <div class="form-group">
+    <label for="package">Ngày hết hạn</label>
+    <input type="datetime-local" id="exp_date" name="exp_date" class="form-control">
+  </div>
+  <div class="form-group">
+    <label for="package">Ngày sản xuất</label>
+    <input type="datetime-local" id="mfg_date" name="mfg_date" class="form-control">
+  </div>
+  <div class="form-group">
+    <label for="package">Số lượng</label>
+    <input
+
+      name="quantity"
+      type="number"
+      class="form-control"
+      id="quantity"
+      placeholder="Nhập số lượng sản phẩm"
+    />
+  </div>
+  <div class="form-group">
+    <label for="package">Giá nhập vào</label>
+    <input
+
+      name="price_import"
+      type="text"
+      class=" money form-control"
+      id="price_import"
+      placeholder="Nhập giá sản phẩm nhập vào"
+    />
+  </div>
+  <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+<%- include('./partials/footer');%>
