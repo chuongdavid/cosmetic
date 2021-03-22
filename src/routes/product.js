@@ -271,13 +271,15 @@ productRouter.delete("/delete/:id", (req, res) => {
 productRouter.get("/edit/:id", (req, res) => {
   const id = req.params.id;
   const user = req.session.user;
-  let sql = `SELECT p.*, d.id ,a.volume, a.price, a.volume_unit FROM product_detailed AS d, product AS p, product_attr AS a WHERE d.id = ? AND a.id = d.attr_id`;
+  //let sql = `SELECT p.*, d.id ,a.volume, a.price, a.volume_unit FROM product_detailed AS d, product AS p, product_attr AS a WHERE d.id = ? AND a.id = d.attr_id`;
+  let sql = `SELECT d.id, p.desc,p.ingredient,p.brand,p.category,p.name, a.price,a.volume,a.volume_unit FROM product_detailed AS d INNER JOIN product AS p ON p.id = d.product_id AND d.id = ? INNER JOIN product_attr AS a ON a.id = d.attr_id`
   const params = [id];
   db.query(sql, params, (err, result, fields) => {
     if (err) {
       req.flash("error", err);
       console.log("Lỗi: ", err);
     }
+    console.log(result);
     //nếu không lỗi
     const edit_product = result[0];
     res.render("editProduct", { edit_product, user });
@@ -314,6 +316,7 @@ productRouter.post("/edit", (req, res) => {
       console.log(err);
     }
     console.log(result);
+    req.flash("success", "Cập nhật sản phẩm thành công");
     return res.redirect("/product");
   });
 });
