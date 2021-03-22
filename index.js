@@ -35,7 +35,7 @@ app.set("view engine", "ejs");
 const productRouter = require("./src/routes/product");
 
 app.use(cookieParser("hungvuong"));
-app.use(session({ cookie: { maxAge: 60000 } }));
+app.use(session({ cookie: { maxAge: 3600000 } }));
 app.use(flash());
 
 app.use("/product", productRouter);
