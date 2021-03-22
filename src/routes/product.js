@@ -318,4 +318,38 @@ productRouter.post("/edit", (req, res) => {
   });
 });
 
+productRouter.post('/search', (req, res) => {
+  const query = req.body.query.toLowerCase();
+  if(query === "" || query === null || query === undefined || query.length === 0) {
+    //if query is empty
+    res.send(JSON.stringify({code: 0, message:"Is empty"}))
+  }
+  else{
+    //if query is not empty
+    const sql = 'SELECT product.image,product_detailed.id,product.name,product_attr.volume,product_attr.volume_unit from product,product_detailed,product_attr where product.name like "%'+query+'%" AND product_detailed.product_id = product.id AND product_attr.id = product_detailed.attr_id' ;
+  
+  db.query(sql,
+  
+  (err, rows, fields) => {
+    if (err) throw err;
+    else if (rows.length ===0){
+      //if not found product
+      res.send(JSON.stringify({code: 1, message:"Product not found"}))
+    }
+    else{
+      //if found product 
+      var data=[];
+      for(var i=0;i<rows.length;i++)
+        {
+          data.push(rows[i]);
+        }
+    
+      res.send(JSON.stringify({code: 2,data}));
+    }
+    
+    });
+  }
+  
+  })
+
 module.exports = productRouter;

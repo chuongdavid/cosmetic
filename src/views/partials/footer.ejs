@@ -100,6 +100,57 @@
         $('#first-volume .clone-volume').clone().find('input').val("").end().appendTo("#dynamic-volume");
         
     }
+    //search function
+    let tableSearch = $('#result-table')
+    tableSearch.hide()
+    function searchResult(str){
+            
+            if(str.length ===0){
+                tableSearch.hide()
+            }
+            else{
+                tableSearch.show()
+            }
+            $.ajax({
+                url: "/product/search",
+                contentType: "application/json",
+                method:"POST",
+                data: JSON.stringify({query:str}),
+                success: function(result){
+                    result = JSON.parse(result)
+                    if(result.code ===0){
+                        tableSearch.hide()
+                        
+                    }
+                    else if(result.code ===1){
+                        $('#body-table').html("<h3><strong class='text text-danger'> ops Không tìm thấy sản phẩm</strong></h3>")
+                    }
+                    else if(result.code ===2){
+                        var data = result.data;
+                        var temp = ""
+                        for (let index = 0; index < data.length; index++) {
+                            const element = data[index];
+                            let string = `<tr>
+                            <td><img
+                            src="/img/${element.image}"
+                            width="50px"
+                            height="50px"
+                            alt=""
+                            /></td>
+                            <td>${element.id}</td>
+                            <td>${element.name}</td>
+                            <td>${element.volume}</td>
+                            <td>${element.volume_unit}</td>
+                          </tr>`
+                          temp += string;
+                            
+                        }
+                        $('#body-table').html(temp)
+                    }
+                }
+            })
+            
+        }
 </script>
 </body>
 
