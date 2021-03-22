@@ -1,0 +1,77 @@
+<%- include('./partials/header');%>
+
+<h1>Trang người dùng</h1>
+
+<%if(success.length > 0){%>
+  <div class="alert alert-success alert-dismissible fade show">
+    <button type="button" class="close" data-dismiss="alert">&times;</button>
+    <%= success %>
+  </div>
+  
+  <%}%> <%if(error.length > 0){%>
+  <div class="alert alert-danger alert-dismissible fade show">
+    <button type="button" class="close" data-dismiss="alert">&times;</button>
+    <%= error %>
+  </div>
+  
+  <%}%>
+
+
+<!-- Page Heading -->
+
+<!-- DataTales Example -->
+<div class="card shadow mb-4">
+  <div class="card-body">
+    <div class="table-responsive">
+      <table
+        class="table table-bordered"
+        id="dataTable"
+        width="100%"
+        cellspacing="0"
+      >
+        <thead>
+          <tr>
+            <th>ID </th>
+            <th>Tên </th>
+            <th>Email </th>
+            <th>Vai trò </th>
+            <th>Số điện thoại</th>
+            <th>Mật khẩu được mã hóa</th>
+            <%if(user.role === 0){%>
+              <th>Hành động</th>
+            <%}%>
+            
+          </tr>
+        </thead>
+        <tbody>
+          <%if(userList){%> <%userList.forEach((item) => {%>
+          <tr>
+            <td><%=item.id%></td>
+            <td><%=item.name%></td>
+            <td><%=item.email%></td>
+            <td><%=item.role%></td>
+            <td><%=item.phone%></td>
+            <td><%=item.password%></td>
+            <%if(user.role === 0){%>
+              <td>
+                <a
+                  class="delete-user btn btn-danger m-1"
+                  href="#"
+                  data-id="<%= item.id %>"
+                  >Xóa</a
+                >
+                <a class="btn btn-warning m-1" href="user/edit/<%=item.id%>"
+                  >Sửa</a
+                >
+              </td>
+            <%}%>
+            
+          </tr>
+          <%});%> <%}%>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<%- include('./partials/footer');%>

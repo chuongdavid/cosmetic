@@ -1,14 +1,61 @@
 const express = require("express");
 const { check, validationResult } = require("express-validator");
 const db = require("../db/database");
+const { nanoid } = require("nanoid");
+const multer = require("multer");
 const bcrypt = require("bcrypt");
 const bodyParser = require("body-parser");
-
+const fs = require("fs");
+const e = require("express");
 const Router = express.Router();
+
+
 Router.use(bodyParser.json());
 
 // parse requests of content-type - application/x-www-form-urlencoded
 Router.use(bodyParser.urlencoded({ extended: true }));
+
+Router.get("/", (req,res) => {
+  const success = req.flash("success") || "";
+  const error = req.flash("error") || "";
+  const user = req.session.user;
+  let userList = new Array();
+  const sql =
+    "SELECT * FROM account";
+  db.query(sql, (err, result, fields) => {
+    if (err) {
+      req.flash("error", err);
+    }
+     else if (result) {
+      result.forEach((row) => {
+        userList.push(row);
+      });
+      res.render("users", {success, userList, error, user });
+    } else {
+      res.render("users");
+    }
+  });
+})
+
+Router.delete("/delete/:id", (req, res) => {
+  const id = req.params.id;
+  console.log(id)
+  let sql = `DELETE FROM account WHERE id = ?`;
+  const params = [id];
+  db.query(sql, params, (err, result, fields) => {
+    if (err) {
+      req.flash("error", err);
+      res.send("Xu ly");
+    } else if (result.affectedRows > 0) {
+      req.flash("success", "Xóa người dùng thành công");
+      console.log(result);
+      return res.send("success");
+    } else {
+      req.flash("error", "Xóa người dùng thất bại");
+      return res.send("error");
+    }
+  });
+});
 
 Router.get("/login", (req, res) => {
   if (req.session.user) {
@@ -73,6 +120,7 @@ Router.post("/login", LoginValidator, (req, res) => {
           return res.redirect("/user/login");
         } else {
           req.session.user = results[0];
+          console.log(results[0])
           return res.redirect("/");
         }
       }
@@ -94,6 +142,49 @@ Router.post("/login", LoginValidator, (req, res) => {
     res.redirect("/user/login");
   }
 });
+
+Router.get("/edit/:id", (req, res) => {
+  const id = req.params.id;
+  const user = req.session.user;
+  let sql = `SELECT * FROM account WHERE id = ?`;
+  const params = [id];
+  db.query(sql, params, (err, result, fields) => {
+    if (err) {
+      req.flash("error", err);
+      console.log("Lỗi: ", err);
+    }
+    //nếu không lỗi
+    const edit_user = result[0];
+    res.render("editUser", { edit_user, user });
+  });
+});
+Router.post("/edit", (req, res) => {
+  const {
+    name,
+    email,
+    role,
+    phone,
+    id
+  } = req.body;
+  console.log(req.body);
+  const sql =
+    "UPDATE account SET name = ?, email = ?, role = ? ,phone = ? WHERE id = ? ";
+  const params = [
+    name,
+    email,
+    role,
+    phone,
+    id
+  ];
+  db.query(sql, params, (err, result, fields) => {
+    if (err) {
+      console.log(err);
+    }
+    console.log(result);
+    return res.redirect("/user");
+  });
+});
+
 
 Router.get("/register", (req, res) => {
   const error = req.flash("error") || "";
