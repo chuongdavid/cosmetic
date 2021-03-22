@@ -53,6 +53,8 @@
 
 <!-- Custom scripts for all pages-->
 <script src="/js/sb-admin-2.min.js"></script>
+<script type="text/javascript" src="/js/simple.money.format.js"></script>
+
 <script>
     $(document).ready(() => {
         $('.delete-product').on('click', (e) => {
@@ -74,6 +76,8 @@
             
         })
 
+        //định dạng tiền
+        
 
         
         
@@ -83,11 +87,12 @@
         $('#first-volume .clone-volume').clone().find('input').val("").end().appendTo("#dynamic-volume");
         
     }
+    $('.money').simpleMoneyFormat();
     //search function
     let tableSearch = $('#result-table')
     tableSearch.hide()
     function searchResult(str){
-            
+            console.log(str)
             if(str.length ===0){
                 tableSearch.hide()
             }
@@ -134,6 +139,8 @@
             })
             
         }
+
+   
 </script>
 </body>
 
