@@ -19,6 +19,7 @@
 
     <!-- Custom styles for this template-->
     <link href="/css/sb-admin-2.min.css" rel="stylesheet">
+    
 
 
 </head>
@@ -53,16 +54,24 @@
             </li>
 
             <!-- Nav Item - Utilities Collapse Menu -->
-            <li class="nav-item">
+            <li class="nav-item" >
               <a class="nav-link" href="/user">
                   <i class="fa fa-list"></i>
                   <span>Quản lý thành viên</span></a>
+                
             </li>
-            <li class="nav-item">
-                <a class="nav-link" href="/package">
+            <li class="nav-item" >
+                <a class="nav-link collapsed" href="/package" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
                     <i class="fa fa-list"></i>
                     <span>Quản lý lô nhập</span></a>
-              </li>
+                <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <h6 class="collapse-header">Sắp hết hạn</h6>
+                        <a class="collapse-item" href="/package/exp-date">Xem chi tiết</a>
+                        
+                    </div>
+                </div>    
+            </li>
 
             <!-- Divider -->
             <hr class="sidebar-divider d-none d-md-block">

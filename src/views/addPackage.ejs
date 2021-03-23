@@ -3,7 +3,7 @@
   <div class="form-group">
     <label for="package">Mã sản phẩm</label>
     <input
-
+      value="<%= product_id %>"
       name="product_id"
       type="text"
       class="form-control"
@@ -12,17 +12,18 @@
     />
   </div>
   <div class="form-group">
-    <label for="package">Ngày hết hạn</label>
-    <input type="datetime-local" id="exp_date" name="exp_date" class="form-control">
+    <label for="mfg_date">Ngày sản xuất</label>
+    <input value="<%= mfg_date %>" type="date" id="mfg_date" name="mfg_date" class="form-control">
   </div>
   <div class="form-group">
-    <label for="package">Ngày sản xuất</label>
-    <input type="datetime-local" id="mfg_date" name="mfg_date" class="form-control">
+    <label for="exp_date">Ngày hết hạn</label>
+    <input value="<%= exp_date %>" type="date" id="exp_date" name="exp_date" class="form-control">
   </div>
+
   <div class="form-group">
     <label for="package">Số lượng</label>
     <input
-
+      value="<%= quantity %>"
       name="quantity"
       type="number"
       class="form-control"
@@ -33,7 +34,7 @@
   <div class="form-group">
     <label for="package">Giá nhập vào</label>
     <input
-
+      value="<%= price_import %>"
       name="price_import"
       type="text"
       class=" money form-control"
@@ -41,6 +42,13 @@
       placeholder="Nhập giá sản phẩm nhập vào"
     />
   </div>
+  <div class="form-group">
+    <%if(error.length > 0){%>
+      <div class="alert alert-danger alert-dismissible fade show">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        <%= error %>
+      </div>
+    <%}%>
   <button type="submit" class="btn btn-primary">Submit</button>
 </form>
 <%- include('./partials/footer');%>

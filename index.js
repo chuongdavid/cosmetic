@@ -1,4 +1,5 @@
 require("dotenv").config();
+const db = require("./src/db/database");
 const express = require("express");
 const ejs = require("ejs");
 const bodyParser = require("body-parser");
@@ -47,7 +48,24 @@ app.get("/", (req, res) => {
     return res.redirect("/user/login");
   }
   const user = req.session.user;
-  res.render("index", { user });
+
+  //check exp_Date của lô sản phẩm
+  let package_exp = new Array()
+  let count = 0;
+  const sql = "SELECT * FROM product_package WHERE exp_date BETWEEN curdate() AND curdate() + INTERVAL 6 MONTH"
+  db.query(sql, (err, result, fields) => {
+    if (err) {
+    req.flash("error", err);
+    } else if (result) {
+      result.forEach((row) => {
+        package_exp.push(row);
+      });
+      count = package_exp.length;
+      res.render("index", {package_exp, count , user })
+    } else {
+      console.log('Whoops! We hit an error')
+    }
+  });
 });
 
 const port = process.env.PORT || 9000;

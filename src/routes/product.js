@@ -24,6 +24,9 @@ const upload = multer({
 });
 
 productRouter.get("/", (req, res) => {
+  if (!req.session.user) {
+    return res.redirect("/user/login");
+  }
   const success = req.flash("success") || "";
   const error = req.flash("error") || "";
   //delete product in product table if not exist in product_detailed
@@ -89,6 +92,9 @@ const add_validator = [
     .withMessage("Không được để trống giá sản phẩm "),
 ];
 productRouter.get("/add", (req, res) => {
+  if (!req.session.user) {
+    return res.redirect("/user/login");
+  }
   const user = req.session.user;
   const error = req.flash("error") || "";
   const name = req.flash("name") || "";
@@ -269,9 +275,11 @@ productRouter.delete("/delete/:id", (req, res) => {
   });
 });
 productRouter.get("/edit/:id", (req, res) => {
+  if (!req.session.user) {
+    return res.redirect("/user/login");
+  }
   const id = req.params.id;
   const user = req.session.user;
-  //let sql = `SELECT p.*, d.id ,a.volume, a.price, a.volume_unit FROM product_detailed AS d, product AS p, product_attr AS a WHERE d.id = ? AND a.id = d.attr_id`;
   let sql = `SELECT d.id, p.desc,p.ingredient,p.brand,p.category,p.name, a.price,a.volume,a.volume_unit FROM product_detailed AS d INNER JOIN product AS p ON p.id = d.product_id AND d.id = ? INNER JOIN product_attr AS a ON a.id = d.attr_id`
   const params = [id];
   db.query(sql, params, (err, result, fields) => {

@@ -1,23 +1,9 @@
 <%- include('./partials/header');%>
 
-<h1>Trang lô sản phẩm</h1>
-<a class="btn btn-success m-2 btn-sm" href="/package/add">Thêm lô sản phẩm</a>
+<h1>Các lô sản phẩm sắp hết hạn</h1>
 
-<%if(success.length > 0){%>
-  <div class="alert alert-success alert-dismissible fade show">
-    <button type="button" class="close" data-dismiss="alert">&times;</button>
-    <%= success %>
-  </div>
-  
-  <%}%> <%if(error.length > 0){%>
-  <div class="alert alert-danger alert-dismissible fade show">
-    <button type="button" class="close" data-dismiss="alert">&times;</button>
-    <%= error %>
-  </div>
-  
-  <%}%>
 <!-- Page Heading -->
-
+<h5 class="text text-danger">Có <strong> <%=count%> </strong>  lô sản phẩm còn hạn sử dụng trong vòng 6 tháng</h5>
 <!-- DataTales Example -->
 <div class="card shadow mb-4">
   <div class="card-body">
@@ -41,7 +27,7 @@
           </tr>
         </thead>
         <tbody>
-          <%if(packageList){%> <%packageList.forEach((package) => {%>
+          <%if(package_exp){%> <%package_exp.forEach((package) => {%>
           <tr>
             <td><%= package.id%></td>
             <td><%= package.product_id%></td>
@@ -51,8 +37,8 @@
             <td><%= package.quantity%></td>
             <td><%= package.price_import%> VNĐ</td>
             <td>
-              <a class="btn btn-warning m-1" href="#"
-                >Sửa</a
+              <a class="btn btn-danger m-1" href="#"
+                >Xóa</a
               >
             </td>
           </tr>
