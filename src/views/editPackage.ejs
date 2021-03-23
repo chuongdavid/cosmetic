@@ -1,0 +1,45 @@
+<%- include('./partials/header');%>
+
+
+<form method="POST" action="/package/edit">
+  <div class="form-group">
+    <label for="user">Mã sản phẩm</label>
+    <input
+      readonly
+      value="<%= edit_package.product_id %>"
+      name="product_id"
+      type="text"
+      class="form-control"
+      
+    />
+  </div>
+  
+  <div class="form-group">
+    <label for="user">Số lượng</label>
+    <input
+      value="<%= edit_package.quantity %>"
+      name="quantity"
+      type="text"
+      class="form-control"
+
+      placeholder="Nhập số lượng"
+    />
+  </div>
+  <div class="form-group">
+    <label for="user">Giá nhập</label>
+    <input
+      value="<%= edit_package.price_import %>"
+      name="price_import"
+      type="text"
+      class="form-control"
+
+      placeholder="Nhập giá nhập vào"
+    />
+  </div>
+ 
+
+
+    
+  <button id="edit_package" type="submit" class=" btn btn-primary">Update</button>
+</form>
+<%- include('./partials/footer');%>

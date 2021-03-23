@@ -33,8 +33,8 @@
             <th>Mã lô</th>
             <th>Mã sản phẩm</th>
             <th>Ngày nhập</th>
-            <th>Ngày hết hạn</th>
             <th>Ngày sản xuất</th>
+            <th>Ngày hết hạn</th>
             <th>Số lượng</th>
             <th>Giá nhập</th>
             <th>Hành động</th>
@@ -51,9 +51,15 @@
             <td><%= package.quantity%></td>
             <td><%= package.price_import%> VNĐ</td>
             <td>
-              <a class="btn btn-warning m-1" href="#"
-                >Sửa</a
-              >
+              <a
+                  class="delete-package btn btn-danger m-1"
+                  href="#"
+                  data-id="<%= package.id %>"
+                  >Xóa</a
+                >
+                <a class="btn btn-warning m-1" href="package/edit/<%=package.id%>"
+                  >Sửa</a
+                >
             </td>
           </tr>
           <%});%> <%}%>

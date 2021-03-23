@@ -68,6 +68,68 @@ const add_validator = [
       .withMessage("Không được để trống giá sản phẩm "),
   ];
 
+  packageRouter.delete("/delete/:id", (req, res) => {
+    const id = req.params.id;
+    console.log(id)
+    let sql = `DELETE FROM product_package WHERE id = ?`;
+    const params = [id];
+    db.query(sql, params, (err, result, fields) => {
+      if (err) {
+        req.flash("error", err);
+        res.send("Xu ly");
+      } else if (result.affectedRows > 0) {
+        req.flash("success", "Xóa lô thành công");
+        console.log(result);
+        return res.send("success");
+      } else {
+        req.flash("error", "Xóa lô thất bại");
+        return res.send("error");
+      }
+    });
+  });
+  packageRouter.get("/edit/:id" ,(req, res) => {
+    const id = req.params.id;
+    const user = req.session.user;
+    let sql = `SELECT * FROM product_package WHERE id = ?`;
+    const params = [id];
+    db.query(sql, params, (err, result, fields) => {
+      if (err) {
+        req.flash("error", err);
+        console.log("Lỗi: ", err);
+      }
+     
+      //nếu không lỗi
+      const edit_package = result[0];
+      res.render("editPackage", { edit_package, user });
+    });
+  });
+  packageRouter.post("/edit", (req, res) => {
+    const {
+
+      quantity,
+      price_import,
+      product_id,
+      
+    } = req.body;
+    console.log(req.body);
+    const sql =
+      "UPDATE product_package SET quantity = ?, price_import = ? WHERE product_id = ? ";
+    const params = [
+      quantity,
+      price_import,
+      product_id,
+
+    ];
+    db.query(sql, params, (err, result, fields) => {
+      if (err) {
+        console.log(err);
+      }
+      console.log(result);
+      req.flash("success", "Cập nhật sản phẩm thành công");
+      return res.redirect("/package");
+    });
+  });
+
 packageRouter.get('/add', (req, res) => {
     if (!req.session.user) {
       return res.redirect("/user/login");

@@ -287,12 +287,14 @@ productRouter.get("/edit/:id", (req, res) => {
       req.flash("error", err);
       console.log("Lỗi: ", err);
     }
+
     console.log(result);
     //nếu không lỗi
     const edit_product = result[0];
     res.render("editProduct", { edit_product, user });
   });
 });
+
 productRouter.post("/edit", (req, res) => {
   const {
     id,
