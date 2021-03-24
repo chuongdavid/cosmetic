@@ -61,19 +61,26 @@
                   <span>Quản lý thành viên</span></a>
                 
             </li>
-            <li class="nav-item" >
-                <a class="nav-link collapsed" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages"
+                    aria-expanded="true" aria-controls="collapsePages">
                     <i class="fa fa-list"></i>
-                    <span>Quản lý lô nhập</span></a>
-                <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                    <span>Quản lý lô nhập</span>
+                </a>
+                <div id="collapsePages" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
+                        <h6 class="collapse-header">Các danh mục:</h6>
                         <a class="collapse-item" href="/package">Chi tiết lô hàng</a>
                         <a class="collapse-item" href="/package/exp-date">Lô sắp hết hạn</a>
-                        
                     </div>
-                </div>    
+                </div>
             </li>
 
+            <li class="nav-item">
+                <a class="nav-link" href="/payment">
+                  <i class="fas fa-cash-register"></i>
+                    <span>Thanh toán</span></a>
+              </li>
             <!-- Divider -->
             <hr class="sidebar-divider d-none d-md-block">
 
@@ -290,7 +297,7 @@
 
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
-                    <table id="result-table" class="table">
+                    <table id="result-table" class= "table" style="display:none">
                         <thead>
                           <tr>
                             <th scope="col">Hình ảnh</th>

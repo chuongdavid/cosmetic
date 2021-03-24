@@ -111,6 +111,8 @@ const add_validator = [
       product_id,
       
     } = req.body;
+    //cap nhap so luong san pham 
+
     console.log(req.body);
     const sql =
       "UPDATE product_package SET quantity = ?, price_import = ? WHERE product_id = ? ";
@@ -149,8 +151,11 @@ packageRouter.post("/add", add_validator ,(req, res) => {
     let result_validation = validationResult(req);
     if(result_validation.errors.length === 0){
         const {product_id,mfg_date,exp_date,quantity,price_import} = req.body;
-    
+      
         var newPrice = price_import.replace(",", "");
+
+
+    
         const sql =
         "insert into product_package(`product_id`,`exp_date`,`mfg_date`,`quantity`,`price_import`) values (?,?,?,?,?)";
         const params = [product_id,exp_date,mfg_date,quantity,newPrice]
@@ -164,8 +169,7 @@ packageRouter.post("/add", add_validator ,(req, res) => {
               req.flash("success", "Thêm lô sản phẩm thành công");
               return res.redirect("/package");
             }
-          });
-        
+          });    
     }
     else{
         let message;
