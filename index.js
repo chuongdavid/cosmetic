@@ -37,12 +37,15 @@ app.set("view engine", "ejs");
 //set routes
 const productRouter = require("./src/routes/product");
 const pakageRouter = require("./src/routes/package");
+const customerRouter = require("./src/routes/customer");
 app.use(cookieParser("hungvuong"));
 app.use(session({ cookie: { maxAge: 3600000 } }));
 app.use(flash());
 
 app.use("/product", productRouter);
 app.use("/package", pakageRouter);
+app.use("/customer", customerRouter);
+
 app.get("/", (req, res) => {
   if (!req.session.user) {
     return res.redirect("/user/login");
