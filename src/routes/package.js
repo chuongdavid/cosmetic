@@ -48,7 +48,6 @@ const add_validator = [
       .withMessage("Không được để trống ngày hết hạn của sản phẩm ")
       .custom((value,{req}) => {
         let d1 = new Date(req.body.mfg_date)
-        console.log(value)
         let d2 = new Date(value)
         if(d1.getTime() > d2.getTime()){
             throw new Error("Ngày hết hạn phải sau ngày sản xuất")
@@ -70,7 +69,16 @@ const add_validator = [
 
   packageRouter.delete("/delete/:id", (req, res) => {
     const id = req.params.id;
-    console.log(id)
+    let quantity_delete;
+    let product_id;
+    //get quantity and product_id from packageProduct
+    db.query(`SELECT quantity,product_id FROM product_package WHERE id = ${id} `,(err, result, fields) => {
+      quantity_delete = result[0].quantity;
+      product_id = result[0].product_id;
+    })
+
+
+    
     let sql = `DELETE FROM product_package WHERE id = ?`;
     const params = [id];
     db.query(sql, params, (err, result, fields) => {
@@ -79,7 +87,18 @@ const add_validator = [
         res.send("Xu ly");
       } else if (result.affectedRows > 0) {
         req.flash("success", "Xóa lô thành công");
-        console.log(result);
+
+        //update số lượng lô
+        db.query(`UPDATE product_attr, product_detailed SET quantity = quantity - ? WHERE product_detailed.id = ? AND product_detailed.attr_id = product_attr.id`,
+        [quantity_delete,product_id],
+        (errUpdate,resultUpdate, fieldsUpdate) => {
+            if(err) {
+              console.error(errUpdate);
+            }
+            else{
+              console.log(resultUpdate);
+            }
+        })
         return res.send("success");
       } else {
         req.flash("error", "Xóa lô thất bại");
@@ -105,28 +124,41 @@ const add_validator = [
   });
   packageRouter.post("/edit", (req, res) => {
     const {
-
+      id,
       quantity,
       price_import,
       product_id,
       
     } = req.body;
     //cap nhap so luong san pham 
-
-    console.log(req.body);
+    let quantity_delete;
+    //get quantity and product_id from packageProduct
+    db.query(`SELECT quantity FROM product_package WHERE id = ${id} `,(err, result, fields) => {
+      quantity_delete = result[0].quantity;
+    })
     const sql =
-      "UPDATE product_package SET quantity = ?, price_import = ? WHERE product_id = ? ";
+      "UPDATE product_package SET quantity = ?, price_import = ? WHERE id = ? ";
     const params = [
       quantity,
       price_import,
-      product_id,
+      id,
 
     ];
     db.query(sql, params, (err, result, fields) => {
       if (err) {
         console.log(err);
       }
-      console.log(result);
+      //update số lượng lô
+      db.query(`UPDATE product_attr, product_detailed SET quantity = quantity - ? + ? WHERE product_detailed.id = ? AND product_detailed.attr_id = product_attr.id`,
+      [quantity_delete,quantity,product_id],
+      (errUpdate,resultUpdate, fieldsUpdate) => {
+          if(err) {
+            console.error(errUpdate);
+          }
+          else{
+            console.log(resultUpdate);
+          }
+      })
       req.flash("success", "Cập nhật sản phẩm thành công");
       return res.redirect("/package");
     });
@@ -165,20 +197,28 @@ packageRouter.post("/add", add_validator ,(req, res) => {
               req.flash("error", err.message);
               return res.redirect("/package/add");
             } else if (result.affectedRows === 1) {
-              console.log(result);
               req.flash("success", "Thêm lô sản phẩm thành công");
               return res.redirect("/package");
             }
           });    
+
+        //update số lượng cho bảng product_attr
+        db.query(`UPDATE product_attr, product_detailed SET quantity = quantity + ? WHERE product_detailed.id = ? AND product_detailed.attr_id = product_attr.id`,
+        [quantity,product_id],
+        (err,result, fields) => {
+            if(err) {
+              console.error(err);
+            }
+            else{
+              console.log(result);
+            }
+        })
     }
     else{
         let message;
         result_validation = result_validation.mapped();
         for (var fields in result_validation) {
           message = result_validation[fields].msg;
-          console.log(result_validation)
-          console.log(result_validation[fields])
-          console.log(message);
           break;
         }
         const {product_id,mfg_date,exp_date,quantity,price_import} = req.body;

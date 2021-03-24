@@ -40,7 +40,7 @@ productRouter.get("/", (req, res) => {
   const user = req.session.user;
   let productList = new Array();
   const sql =
-    "SELECT  product_detailed.id,product.name,product.desc,product.ingredient,product.brand,product.category,product.image,product_attr.volume,product_attr.price,product_attr.volume_unit FROM product,product_detailed,product_attr WHERE product.id = product_detailed.product_id AND product_detailed.attr_id = product_attr.id";
+    "SELECT  product_detailed.id,product.name,product.desc,product.ingredient,product.brand,product.category,product.image,product_attr.volume,product_attr.price,product_attr.volume_unit,product_attr.quantity FROM product,product_detailed,product_attr WHERE product.id = product_detailed.product_id AND product_detailed.attr_id = product_attr.id";
   db.query(sql, (err, result, fields) => {
     if (err) {
       req.flash("error", err);

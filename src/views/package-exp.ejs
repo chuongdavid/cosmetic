@@ -37,9 +37,12 @@
             <td><%= package.quantity%></td>
             <td><%= package.price_import%> VNĐ</td>
             <td>
-              <a class="btn btn-danger m-1" href="#"
-                >Xóa</a
-              >
+              <a
+              class="delete-package btn btn-danger m-1"
+              href="#"
+              data-id="<%= package.id %>"
+              >Xóa</a
+            >
             </td>
           </tr>
           <%});%> <%}%>

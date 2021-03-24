@@ -3,6 +3,17 @@
 
 <form method="POST" action="/package/edit">
   <div class="form-group">
+    <label for="user">Mã lô</label>
+    <input
+      readonly
+      value="<%= edit_package.id %>"
+      name="id"
+      type="text"
+      class="form-control"
+      
+    />
+  </div>
+  <div class="form-group">
     <label for="user">Mã sản phẩm</label>
     <input
       readonly
