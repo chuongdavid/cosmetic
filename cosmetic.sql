@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Máy chủ: 127.0.0.1
--- Thời gian đã tạo: Th3 23, 2021 lúc 04:56 AM
+-- Thời gian đã tạo: Th3 24, 2021 lúc 09:37 AM
 -- Phiên bản máy phục vụ: 10.4.17-MariaDB
 -- Phiên bản PHP: 7.3.27
 
@@ -45,9 +45,28 @@ INSERT INTO `account` (`id`, `name`, `email`, `role`, `phone`, `password`) VALUE
 (8, 'IPhone 12', 'tincao241@gmail.com', 0, '0909829308', '$2b$10$.02l/wCjyAHmhectQZAR5us1wAGfkK0rednXy76n1s0PdrmKlyImy'),
 (9, 'Trung Tín', 'tincao241@gmail.com', 0, '0909829308', '$2b$10$5F252HgSdfyTTo8Rv7qq2e4y7v7GTklrgFDAvM9Cgmfs/vBWNj8MO'),
 (10, 'Trung Tín', 'tincao241@gmail.com', 0, '0909829308', '$2b$10$oaSNs0TH2S47Z7NV2oFR4u.2Tk8ImkGRhe4MxwsPsaV1kixW/vHWy'),
-(11, 'Trung Tín', 'tincao241@gmail.com', 0, '0909829308', '$2b$10$QkFxpdBPsqddZY.fjZotKOxbsD3HzYISYmxhHuezfBWKggrtDikHu'),
 (12, 'Dương Thụy Chương', 'tincao111@gmail.com', 0, '0909829308', '$2b$10$GcyF23o5A9N8YLrc83gGoetjceA1/p4KayvVGfjvq5SukG6UhxUkG'),
 (0, 'Dương Thụy Chương', 'chuongddavid@gmail.com', 0, '0387845823', '$2b$10$4FcUYv0PIkDakeVgSX/y.uPdK7AVEkSX3.o.C5iKEPoxSuYgtTe96');
+
+-- --------------------------------------------------------
+
+--
+-- Cấu trúc bảng cho bảng `customer`
+--
+
+CREATE TABLE `customer` (
+  `id` int(11) NOT NULL,
+  `name` varchar(100) DEFAULT NULL,
+  `phone_number` varchar(15) DEFAULT NULL,
+  `email` varchar(100) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Đang đổ dữ liệu cho bảng `customer`
+--
+
+INSERT INTO `customer` (`id`, `name`, `phone_number`, `email`) VALUES
+(1, 'Chương Dương', '0387845823', 'chuongddavid@gmail.com');
 
 -- --------------------------------------------------------
 
@@ -70,6 +89,7 @@ CREATE TABLE `product` (
 --
 
 INSERT INTO `product` (`id`, `name`, `desc`, `ingredient`, `brand`, `category`, `image`) VALUES
+('i2IMVCPobVN', 'Dung Dịch Tẩy Da Chết Paula’s Choice BHA 2% 30ml', 'Dung Dịch Loại Bỏ Tế Bào Chết Paula’s Choice Skin Perfecting 2% BHA Liquid Exfoliant đến từ thương hiệu dược mỹ phẩm Paula\'s Choice nổi tiếng của Mỹ là sản phẩm tẩy tế bào chết hóa học với nồng độ 2% BHA (Salicylic Acid) giúp làm sạch sâu lỗ chân lông, cải thiện tình trạng mụn ẩn - mụn đầu đen, đồng thời làm mờ nếp nhăn sâu, cải thiện tông màu da, mang lại cho bạn làn da sáng mịn, rạng rỡ và khỏe mạnh. Công thức sản phẩm dịu nhẹ, không gây bào mòn da, dễ dàng thẩm thấu mà không làm bít tắc lỗ chân lông.', 'Water (Aqua), Methylpropanediol (hydration), Butylene Glycol (hydration), Salicylic Acid (beta hydroxy acid/exfoliant), Polysorbate 20 (stabilizer), Camellia Oleifera Leaf Extract (green tea/skin calming/antioxidant), Sodium Hydroxide (pH balancer), Tetrasodium EDTA (stabilizer).', 'Paula’s Choice ', ' Xỉn Màu & Thâm Sạm ', 'dung-dich-loai-bo-te-bao-chet-paula-s-choice-bha-2-30ml-1_img_80x80_d200c5_fit_center.jpg'),
 ('rTgsVb1I3aT', 'Sữa Rửa Mặt Cetaphil Dịu Nhẹ', 'Sạch sâu thông thoáng lỗ chân lông', 'AHA, BHA', 'Cetaphil', 'Chăm sóc mặt', 'srm.jpg'),
 ('xcgn5TJ1zDf', 'Sữa Rửa Mặt Cetaphil Dịu Nhẹ 2', 'Sạch sâu thông thoáng lỗ chân lông', 'AHA, BHA', 'Cetaphil', 'Chăm sóc mặt', 'tinh-chat-some-by-mi-cho-da-mun-50ml-111_2__img_80x80_d200c5_fit_center.jpg');
 
@@ -83,18 +103,21 @@ CREATE TABLE `product_attr` (
   `id` varchar(50) NOT NULL,
   `volume` float DEFAULT NULL,
   `price` float DEFAULT NULL,
-  `volume_unit` varchar(10) DEFAULT 'ml'
+  `volume_unit` varchar(10) DEFAULT 'ml',
+  `quantity` int(11) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Đang đổ dữ liệu cho bảng `product_attr`
 --
 
-INSERT INTO `product_attr` (`id`, `volume`, `price`, `volume_unit`) VALUES
-('1A3_ByRTtNq', 123, 600000, 'ml'),
-('IaG_14qioJ2', 200, 500000, 'g'),
-('LUtol_sFp2E', 125, 138000, 'ml'),
-('QzLMhMXJ3eN', 150, 500000, 'g');
+INSERT INTO `product_attr` (`id`, `volume`, `price`, `volume_unit`, `quantity`) VALUES
+('1A3_ByRTtNq', 123, 600000, 'ml', 50),
+('1u4fC8cHsyU', 30, 254000, 'ml', 0),
+('IaG_14qioJ2', 200, 500000, 'g', 0),
+('LUtol_sFp2E', 125, 138000, 'ml', 0),
+('mYlBCc4zwSm', 118, 723, 'ml', 0),
+('QzLMhMXJ3eN', 150, 500000, 'g', 0);
 
 -- --------------------------------------------------------
 
@@ -113,6 +136,8 @@ CREATE TABLE `product_detailed` (
 --
 
 INSERT INTO `product_detailed` (`id`, `product_id`, `attr_id`) VALUES
+('0P8tOst6FH_', 'i2IMVCPobVN', 'mYlBCc4zwSm'),
+('4OF7jrj-4y9', 'i2IMVCPobVN', '1u4fC8cHsyU'),
 ('MruShp55RUO', 'rTgsVb1I3aT', 'LUtol_sFp2E'),
 ('NlWVCHOlK2z', 'xcgn5TJ1zDf', '1A3_ByRTtNq'),
 ('tLtRQbN4u0g', 'xcgn5TJ1zDf', 'QzLMhMXJ3eN'),
@@ -140,13 +165,19 @@ CREATE TABLE `product_package` (
 --
 
 INSERT INTO `product_package` (`id`, `product_id`, `exp_date`, `mfg_date`, `quantity`, `price_import`, `created_at`, `updated_at`) VALUES
-(6, 'NlWVCHOlK2z', '2021-06-23', '2020-11-23', 120, 123456, '2021-03-23 02:48:36', NULL),
 (7, 'tLtRQbN4u0g', '2021-10-23', '2020-12-09', 500, 123456, '2021-03-23 02:49:00', NULL),
-(8, 'NlWVCHOlK2z', '2021-04-10', '2021-03-10', 70, 8000, '2021-03-23 02:49:22', NULL);
+(9, '0P8tOst6FH_', '2022-01-24', '2021-01-23', 200, 600000, '2021-03-24 03:26:02', NULL),
+(10, '4OF7jrj-4y9', '2021-03-26', '2021-03-11', 12000, 120000, '2021-03-24 05:26:03', '2021-03-24 07:45:36');
 
 --
 -- Chỉ mục cho các bảng đã đổ
 --
+
+--
+-- Chỉ mục cho bảng `customer`
+--
+ALTER TABLE `customer`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Chỉ mục cho bảng `product`
@@ -180,10 +211,16 @@ ALTER TABLE `product_package`
 --
 
 --
+-- AUTO_INCREMENT cho bảng `customer`
+--
+ALTER TABLE `customer`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
 -- AUTO_INCREMENT cho bảng `product_package`
 --
 ALTER TABLE `product_package`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- Các ràng buộc cho các bảng đã đổ
