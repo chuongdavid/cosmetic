@@ -1,0 +1,46 @@
+<%- include('./partials/header');%>
+<form method="post" action="/customer/add">
+  <div class="form-group">
+    <label for="package">Tên khách hàng</label>
+    <input
+      value="<%= name %>"
+      name="name"
+      type="text"
+      class="form-control"
+      id="name"
+      placeholder="Nhập tên khách hàng"
+    />
+  </div>
+  <div class="form-group">
+    <label for="package">Số điện thoại khách hàng</label>
+    <input
+      value="<%= phone_number %>"
+      name="phone_number"
+      type="text"
+      class="form-control"
+      id="phone_number"
+      placeholder="Nhập số điện thoại khách hàng"
+    />
+  </div>
+  <div class="form-group">
+    <label for="package">Email khách hàng</label>
+    <input
+      value="<%= email %>"
+      name="email"
+      type="text"
+      class="form-control"
+      id="email"
+      placeholder="Nhập email"
+    />
+  </div>
+  
+  <div class="form-group">
+    <%if(error.length > 0){%>
+      <div class="alert alert-danger alert-dismissible fade show">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        <%= error %>
+      </div>
+    <%}%>
+  <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+<%- include('./partials/footer');%>

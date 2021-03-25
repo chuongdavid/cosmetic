@@ -1,0 +1,55 @@
+<%- include('./partials/header');%>
+
+
+<form method="POST" action="/customer/edit">
+  <div class="form-group">
+    <label for="user">ID </label>
+    <input
+      readonly
+      value="<%= edit_customer.id %>"
+      name="id"
+      type="text"
+      class="form-control"
+      
+    />
+  </div>
+  <div class="form-group">
+    <label for="user">Tên </label>
+    <input
+      value="<%= edit_customer.name %>"
+      name="name"
+      type="text"
+      class="form-control"
+      
+      placeholder="Nhập tên sản phẩm"
+    />
+  </div>
+  <div class="form-group">
+    <label for="user">Email </label>
+    <input
+      value="<%= edit_customer.email %>"
+      name="email"
+      type="text"
+      class="form-control"
+     
+      placeholder="Nhập email khách hàng"
+    />
+  </div>
+  <div class="form-group">
+    <label for="user">Số điện thoại</label>
+    <input
+      value="<%= edit_customer.phone_number %>"
+      name="phone_number"
+      type="text"
+      class="form-control"
+
+      placeholder="Nhập số điện thoại khách hàng"
+    />
+  </div>
+  
+ 
+
+  <div class="form-group">
+  <button id="edit_customer" type="submit" class=" btn btn-primary">Update</button>
+</form>
+<%- include('./partials/footer');%>
