@@ -27,6 +27,7 @@ productRouter.get("/", (req, res) => {
   if (!req.session.user) {
     return res.redirect("/user/login");
   }
+  const user = req.session.user;
   const success = req.flash("success") || "";
   const error = req.flash("error") || "";
   //delete product in product table if not exist in product_detailed
@@ -37,7 +38,7 @@ productRouter.get("/", (req, res) => {
     }
   });
   //xoa neu chi tiet san pham khong ton tai
-  const user = req.session.user;
+  
   let productList = new Array();
   const sql =
     "SELECT  product_detailed.id,product.name,product.desc,product.ingredient,product.brand,product.category,product.image,product_attr.volume,product_attr.price,product_attr.volume_unit,product_attr.quantity FROM product,product_detailed,product_attr WHERE product.id = product_detailed.product_id AND product_detailed.attr_id = product_attr.id";
@@ -339,7 +340,7 @@ productRouter.post('/search', (req, res) => {
   }
   else{
     //if query is not empty
-    const sql = 'SELECT product.image,product_detailed.id,product.name,product_attr.volume,product_attr.volume_unit from product,product_detailed,product_attr where product.name like "%'+query+'%" AND product_detailed.product_id = product.id AND product_attr.id = product_detailed.attr_id' ;
+    const sql = 'SELECT product.image,product_detailed.id,product.name,product_attr.volume,product_attr.volume_unit,product_attr.price from product,product_detailed,product_attr where product.name like "%'+query+'%" AND product_detailed.product_id = product.id AND product_attr.id = product_detailed.attr_id' ;
   
   db.query(sql,
   

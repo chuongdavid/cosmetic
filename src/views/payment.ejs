@@ -1,0 +1,88 @@
+<%- include('./partials/header');%>
+
+<h1>Thanh toán</h1>
+<form method="post" action="/payment/add">
+    <div class="form-group">
+      <label for="user">ID khách hàng</label>
+      <input
+        name="customer_id"
+        type="text"
+        class="form-control"
+        id="name"
+        placeholder="ID khách hàng"
+      />
+    </div>
+    <div class="form-group">
+      <div id="first-product">
+        <!-- row of each -->
+        <div class="clone-product">
+          <div class="row">
+            <div class="col">
+              <input
+                
+                name="product_id"
+                type="text"
+                class="form-control"
+                id="product_id"
+                placeholder="ID sản phẩm"
+              />
+            </div>
+            <div class="col">
+              <input
+                
+                name="price"
+                type="number"
+                class="form-control"
+                id="price"
+                placeholder="Giá bán"
+              />
+            </div>
+            <div class="col">
+              <input
+                
+                name="quantity"
+                type="number"
+                class="form-control"
+                id="quantity"
+                placeholder="Số lượng"
+              />
+            </div>
+            <div class="col">
+              <input
+                
+                name="total_price"
+                type="number"
+                class="form-control"
+                id="total_price"
+                placeholder="Tổng giá"
+              />
+            </div>
+          </div>
+  
+          <hr />
+        </div>
+        <!-- row of each -->
+      </div>
+    </div>
+    <!-- add product -->
+    <div class="form-group">
+      <div id="dynamic-product"></div>
+    </div>
+    <!-- add product -->
+    <div class="form-group">
+      <div class="row">
+        <div class="col">
+          <a class="btn btn-primary form-control m-2" onclick="addProduct()">
+            Thêm sản phẩm
+          </a>
+        </div>
+        <div class="col">
+          <a class="btn btn-danger form-control  m-2" onclick="removeProduct()">
+            Xóa sản phẩm
+          </a>
+        </div>
+      </div>
+    </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+  </form>
+<%- include('./partials/footer');%>

@@ -134,6 +134,14 @@
     function removeVolume(){
         $('#dynamic-volume .clone-volume').last().remove()
     }
+    function addProduct(){
+
+        $('#first-product .clone-product').clone().find('input').val("").end().appendTo("#dynamic-product");
+        
+    }
+    function removeProduct(){
+        $('#dynamic-product .clone-product').last().remove()
+    }
     $('.money').simpleMoneyFormat();
     //search function
     let tableSearch = $('#result-table')
@@ -175,6 +183,7 @@
                             <td>${element.name}</td>
                             <td>${element.volume}</td>
                             <td>${element.volume_unit}</td>
+                            <td>${element.price}</td>
                           </tr>`
                           temp += string;
                             
