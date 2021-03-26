@@ -2,7 +2,6 @@ require("dotenv").config();
 const db = require("./src/db/database");
 const express = require("express");
 const ejs = require("ejs");
-const bodyParser = require("body-parser");
 const path = require("path");
 const cookieParser = require("cookie-parser");
 const flash = require("express-flash");
@@ -22,10 +21,10 @@ app.use("/user", UserRouter);
 //
 
 // parse requests of content-type - application/json
-app.use(bodyParser.json());
+app.use(express.json());
 
 // parse requests of content-type - application/x-www-form-urlencoded
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.urlencoded({ extended: true }));
 
 //static files
 const publicPath = path.join(__dirname, "./public");
@@ -56,7 +55,9 @@ app.get("/", (req, res) => {
 
   //check exp_Date của lô sản phẩm
   let package_exp = new Array()
+  
   let count = 0;
+  
   const sql = "SELECT * FROM product_package WHERE exp_date BETWEEN curdate() AND curdate() + INTERVAL 6 MONTH"
   db.query(sql, (err, result, fields) => {
     if (err) {
@@ -66,12 +67,62 @@ app.get("/", (req, res) => {
         package_exp.push(row);
       });
       count = package_exp.length;
-      res.render("index", {package_exp, count , user })
+      res.render("index", {package_exp, count , user })    
     } else {
       console.log('Whoops! We hit an error')
     }
   });
+
+  //thống kê doanh thu
+
 });
+app.get('/report', (req, res) => {
+  if (!req.session.user) {
+    return res.redirect("/user/login");
+  }
+  const user = req.session.user;
+  let revenue = new Array()
+  let totalAmount = 0;
+  db.query("SELECT orders.*,transaction.amount,transaction.user_id FROM orders INNER JOIN transaction ON orders.transaction_id = transaction.id", (err1, result1,fields1) => {
+        
+    result1.forEach((row) => {
+      revenue.push(row);
+    });
+    db.query("SELECT * from transaction", (errTrans, resultTrans) => {
+      resultTrans.forEach(row => {
+        totalAmount+=row.amount;
+      })
+      res.render("report", { revenue, user, totalAmount })
+    })
+   
+  })
+})
+app.post('/report', (req, res) => {
+
+  const data = req.body
+  let revenue = []
+  let totalAmount = 0;
+  db.query(`SELECT orders.*,transaction.amount,transaction.user_id FROM orders INNER JOIN transaction ON orders.transaction_id = transaction.id WHERE orders.created_at BETWEEN  "${data.dateStart}"  AND "${data.dateEnd}" `, (err1, result1,fields1) => {
+    if(err1) {
+      throw err;
+    }
+    else if(result1.length===0){
+      //if not found any transaction or order
+      res.send(JSON.stringify({code: 1, message:`Không có giao dịch nào trong thời gian từ ${data.dateStart} đến ${data.dateEnd} `}))
+    }
+    else{
+      result1.forEach((row) => {
+        revenue.push(row);
+      });
+      db.query(`SELECT * from transaction WHERE created_at BETWEEN  "${data.dateStart}"  AND "${data.dateEnd}"`, (errTrans, resultTrans) => {
+        resultTrans.forEach(row => {
+          totalAmount+=row.amount;
+        })
+        res.send(JSON.stringify({code: 2,revenue,totalAmount}));
+      })
+    }
+  })
+})
 
 const port = process.env.PORT || 9000;
 app.listen(port, () => {

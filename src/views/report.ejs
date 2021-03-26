@@ -1,0 +1,60 @@
+<%- include('./partials/header');%>
+<!-- Page Heading -->
+<div class="d-sm-flex align-items-center justify-content-between mb-4">
+  <h1 class="h3 mb-0 text-gray-800">Trang Doanh Thu</h1>
+  <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
+          class="fas fa-download fa-sm text-white-50"></i> Xuất doanh thu</a>
+</div>
+<form>
+  <div class="form-row align-items-center">
+    <div class="col-auto">
+      <label for="inlineFormInput">Chọn ngày bắt đầu</label>
+      <input id="date-start" type="date" class="form-control mb-2">
+    </div>
+    <div class="col-auto">
+      <label for="inlineFormInput">Chọn ngày kết thúc</label>
+      <input id="date-end" type="date" class="form-control mb-2">
+    </div>
+    <div class="col-auto">
+      <button type="submit" id="report-btn" class="btn btn-primary mb-2">Submit</button>
+    </div>
+  </div>
+</form>
+<!-- DataTales Example -->
+<div class="card shadow mb-4">
+  <div class="card-body">
+    <div class="table-responsive">
+      <table
+        class="table table-bordered"
+        id="dataTable"
+        width="100%"
+        cellspacing="0"
+      >
+        <h5>Tổng doanh thu: <strong id="total-price" class="money text text-danger"><%= totalAmount%></strong> đ </h5>
+        <thead>
+          <tr>
+            <th>Mã hóa đơn</th>
+            <th>Mã khách hàng</th>
+            <th>Mã sản phẩm</th>
+            <th>Số lượng</th>
+            <th>Giá bán</th>
+            <th>Ngày bán</th>
+          </tr>
+        </thead>
+        <tbody id="table-report">
+          <%if(revenue){%> <%revenue.forEach((transaction) => {%>
+            <tr>
+              <td><%=transaction.transaction_id%></td>
+              <td><%=transaction.user_id%></td>
+              <td><%=transaction.product_id%></td>
+              <td><%=transaction.quantity%></td>
+              <td class="money"><%=transaction.price%></td>
+              <td><%=transaction.created_at%></td>
+            </tr>
+            <%});%> <%}%>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+<%- include('./partials/footer');%>
