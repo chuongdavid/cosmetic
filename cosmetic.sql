@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Máy chủ: 127.0.0.1
--- Thời gian đã tạo: Th3 24, 2021 lúc 09:37 AM
+-- Thời gian đã tạo: Th3 27, 2021 lúc 05:56 AM
 -- Phiên bản máy phục vụ: 10.4.17-MariaDB
 -- Phiên bản PHP: 7.3.27
 
@@ -66,7 +66,32 @@ CREATE TABLE `customer` (
 --
 
 INSERT INTO `customer` (`id`, `name`, `phone_number`, `email`) VALUES
-(1, 'Chương Dương', '0387845823', 'chuongddavid@gmail.com');
+(1, 'Chương Dương', '0387845823', 'chuongddavid@gmail.com'),
+(2, 'Trung Tín', '0387845822', 'trungtin@gmail.com');
+
+-- --------------------------------------------------------
+
+--
+-- Cấu trúc bảng cho bảng `orders`
+--
+
+CREATE TABLE `orders` (
+  `id` int(11) NOT NULL,
+  `transaction_id` int(11) NOT NULL,
+  `product_id` varchar(50) NOT NULL,
+  `quantity` int(11) NOT NULL,
+  `price` int(11) NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Đang đổ dữ liệu cho bảng `orders`
+--
+
+INSERT INTO `orders` (`id`, `transaction_id`, `product_id`, `quantity`, `price`, `created_at`, `updated_at`) VALUES
+(3, 11, 'NlWVCHOlK2z', 10, 600000, '2021-03-25 08:59:49', NULL),
+(4, 11, 'tLtRQbN4u0g', 2, 500000, '2021-03-25 08:59:49', NULL);
 
 -- --------------------------------------------------------
 
@@ -112,12 +137,12 @@ CREATE TABLE `product_attr` (
 --
 
 INSERT INTO `product_attr` (`id`, `volume`, `price`, `volume_unit`, `quantity`) VALUES
-('1A3_ByRTtNq', 123, 600000, 'ml', 50),
-('1u4fC8cHsyU', 30, 254000, 'ml', 0),
+('1A3_ByRTtNq', 123, 600000, 'ml', 30),
+('1u4fC8cHsyU', 30, 300000, 'ml', -2),
 ('IaG_14qioJ2', 200, 500000, 'g', 0),
 ('LUtol_sFp2E', 125, 138000, 'ml', 0),
-('mYlBCc4zwSm', 118, 723, 'ml', 0),
-('QzLMhMXJ3eN', 150, 500000, 'g', 0);
+('mYlBCc4zwSm', 118, 200000, 'ml', 0),
+('QzLMhMXJ3eN', 150, 500000, 'g', -2);
 
 -- --------------------------------------------------------
 
@@ -169,6 +194,27 @@ INSERT INTO `product_package` (`id`, `product_id`, `exp_date`, `mfg_date`, `quan
 (9, '0P8tOst6FH_', '2022-01-24', '2021-01-23', 200, 600000, '2021-03-24 03:26:02', NULL),
 (10, '4OF7jrj-4y9', '2021-03-26', '2021-03-11', 12000, 120000, '2021-03-24 05:26:03', '2021-03-24 07:45:36');
 
+-- --------------------------------------------------------
+
+--
+-- Cấu trúc bảng cho bảng `transaction`
+--
+
+CREATE TABLE `transaction` (
+  `id` int(11) NOT NULL,
+  `amount` int(11) DEFAULT NULL,
+  `user_id` int(11) DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Đang đổ dữ liệu cho bảng `transaction`
+--
+
+INSERT INTO `transaction` (`id`, `amount`, `user_id`, `created_at`, `updated_at`) VALUES
+(11, 7000000, 1, '2021-03-25 08:59:49', NULL);
+
 --
 -- Chỉ mục cho các bảng đã đổ
 --
@@ -178,6 +224,14 @@ INSERT INTO `product_package` (`id`, `product_id`, `exp_date`, `mfg_date`, `quan
 --
 ALTER TABLE `customer`
   ADD PRIMARY KEY (`id`);
+
+--
+-- Chỉ mục cho bảng `orders`
+--
+ALTER TABLE `orders`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `transaction_id` (`transaction_id`),
+  ADD KEY `product_id` (`product_id`);
 
 --
 -- Chỉ mục cho bảng `product`
@@ -207,6 +261,12 @@ ALTER TABLE `product_package`
   ADD KEY `product_id` (`product_id`);
 
 --
+-- Chỉ mục cho bảng `transaction`
+--
+ALTER TABLE `transaction`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- AUTO_INCREMENT cho các bảng đã đổ
 --
 
@@ -214,7 +274,13 @@ ALTER TABLE `product_package`
 -- AUTO_INCREMENT cho bảng `customer`
 --
 ALTER TABLE `customer`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT cho bảng `orders`
+--
+ALTER TABLE `orders`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT cho bảng `product_package`
@@ -223,8 +289,21 @@ ALTER TABLE `product_package`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
+-- AUTO_INCREMENT cho bảng `transaction`
+--
+ALTER TABLE `transaction`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+
+--
 -- Các ràng buộc cho các bảng đã đổ
 --
+
+--
+-- Các ràng buộc cho bảng `orders`
+--
+ALTER TABLE `orders`
+  ADD CONSTRAINT `orders_ibfk_1` FOREIGN KEY (`transaction_id`) REFERENCES `transaction` (`id`),
+  ADD CONSTRAINT `orders_ibfk_2` FOREIGN KEY (`product_id`) REFERENCES `product_detailed` (`id`);
 
 --
 -- Các ràng buộc cho bảng `product_detailed`
