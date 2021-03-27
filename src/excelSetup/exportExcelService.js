@@ -12,10 +12,15 @@ const exportExcel = (data, workSheetColumnNames, workSheetName, filePath) => {
     xlsx.writeFile(workBook, path.resolve(filePath));
 }
 
-const exportUsersToExcel = (users, workSheetColumnNames, workSheetName, filePath) => {
-    const data = users.map(user => {
-        return [user.id, user.name, user.age];
+const exportUsersToExcel = (reports, workSheetColumnNames, workSheetName, filePath) => {
+    const data = reports.map(report => {
+        console.log(report)
+        return [report.transaction_id, report.user_id, report.product_id, report.quantity, report.price, report.created_at];
     });
+    let price = new Intl.NumberFormat('ja-JP', { style: 'currency', currency: 'VND' }).format(reports[reports.length - 1].totalAmount);
+    data.push(["Tổng doanh thu "+" từ " + 
+    reports[reports.length - 1].dateStart + " đến " +  reports[reports.length - 1].dateEnd + ": "+ price]);
+    console.log("data", data)
     exportExcel(data, workSheetColumnNames, workSheetName, filePath);
 }
 

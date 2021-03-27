@@ -152,6 +152,9 @@
             e.preventDefault();
             var dateStart = ($('#date-start').val());
             var dateEnd = ($('#date-end').val());
+            if(!dateStart || !dateEnd){
+                return alert('Vui lòng chọn ngày')
+            }
             let data = {dateStart,dateEnd}
             fetch('/report', {
                 method: 'POST', // or 'PUT'
@@ -183,8 +186,9 @@
                           temp += string;
                             
                         }
-                        $('#total-price').html(result.totalAmount);
+                        $('#total-price').html(result.totalAmount).addClass('money');
                         $('#table-report').html(temp)
+                        $('.money').simpleMoneyFormat();
                     }
                     
                 })
@@ -192,10 +196,35 @@
                     console.error('Error:', error);
             });
         })
+        $("#excel-export").on('click',() => {
+            var dateStart = ($('#date-start').val());
+            var dateEnd = ($('#date-end').val());
+            if(!dateStart || !dateEnd){
+                return alert('Vui lòng chọn ngày để xuất excel')
+            }
+            let data = {dateStart,dateEnd}
+            fetch('/excel', {
+                method: 'POST', // or 'PUT'
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data),
+                })
+                .then(response => response.json(data))
+                .then(result => {
+                    //khi trả về data
+                    if(result.code ===1){
+                        alert(result.message)
+                    }
+                    else if(result.code === 2){
+                        alert(`File được lưu tại: ${result.fileView} `)
+                    }
+                })
+                .catch((error) => {
+                    console.error('Error:', error);
+            });
+        })
     })
-    function formatPrice(number){
-        return new Intl.NumberFormat('en-IN',{ style: 'currency', currency: 'VND' }).format(number)
-    }
     function addVolume(){
 
         $('#first-volume .clone-volume').clone().find('input').val("").end().appendTo("#dynamic-volume");
@@ -253,12 +282,13 @@
                             <td>${element.name}</td>
                             <td>${element.volume}</td>
                             <td>${element.volume_unit}</td>
-                            <td>${element.price}</td>
+                            <td class = "money">${element.price}</td>
                           </tr>`
                           temp += string;
                             
                         }
                         $('#body-table').html(temp)
+                        $('.money').simpleMoneyFormat();
                     }
                 }
             })

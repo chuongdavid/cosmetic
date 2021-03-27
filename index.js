@@ -1,6 +1,8 @@
 require("dotenv").config();
+
 const db = require("./src/db/database");
 const express = require("express");
+const { nanoid } = require("nanoid");
 const ejs = require("ejs");
 const path = require("path");
 const cookieParser = require("cookie-parser");
@@ -8,6 +10,7 @@ const flash = require("express-flash");
 const multer = require("multer");
 const session = require("express-session");
 const UserRouter = require("./src/routes/UserRouter");
+const exportReportToExcel = require('./src/excelSetup/exportExcelService');
 
 
 const app = express();
@@ -122,6 +125,52 @@ app.post('/report', (req, res) => {
       })
     }
   })
+})
+
+app.post('/excel', (req, res) => {
+  const data = req.body;
+  const dateStart = data.dateStart;
+  const dateEnd = data.dateEnd
+  let revenue = []
+  let totalAmount = 0;
+  db.query(`SELECT orders.*,transaction.amount,transaction.user_id FROM orders INNER JOIN transaction ON orders.transaction_id = transaction.id WHERE orders.created_at BETWEEN  "${data.dateStart}"  AND "${data.dateEnd}" `, (err1, result1,fields1) => {
+    if(err1) {
+      throw err;
+    }
+    else if(result1.length===0){
+      //if not found any transaction or order
+      res.send(JSON.stringify({code: 1, message:`Không có giao dịch nào trong thời gian từ ${data.dateStart} đến ${data.dateEnd} `}))
+    }
+    else{
+      result1.forEach((row) => {
+        revenue.push(row);
+      });
+      db.query(`SELECT * from transaction WHERE created_at BETWEEN  "${data.dateStart}"  AND "${data.dateEnd}"`, (errTrans, resultTrans) => {
+        resultTrans.forEach(row => {
+          totalAmount+=row.amount;
+        })
+        //set up excel exports
+          const workSheetColumnName = [
+            "Mã hóa đơn",
+            "Mã khách hàng",
+            "Mã sản phẩm",
+            "Số lượng",
+            "Giá bán",
+            "Ngày bán"
+        ]
+        let dataReport = revenue;
+        dataReport.push({totalAmount,dateStart,dateEnd})
+        const workSheetName = 'Reports';
+        const filePath = `./public/outputFiles/report_${dateStart}_${dateEnd}_${nanoid(6)}.xlsx` ;
+        const fileView = path.join(__dirname, filePath)
+        exportReportToExcel(dataReport, workSheetColumnName, workSheetName, filePath);
+        res.send(JSON.stringify({code: 2,revenue,totalAmount,fileView}));
+      })
+    }
+  })
+  
+
+
 })
 
 const port = process.env.PORT || 9000;
